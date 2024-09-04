@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "870339522737",
+    "project_id": "mova-8729b",
+    "storage_bucket": "mova-8729b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870339522737:android:d8273ec55d12900e84f290",
+        "android_client_info": {
+          "package_name": "com.example.movaapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4yvfN2w74XcopeIzjdQtNgwtg55mLcrk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
