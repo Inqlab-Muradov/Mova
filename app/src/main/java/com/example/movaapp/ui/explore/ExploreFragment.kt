@@ -1,11 +1,13 @@
 package com.example.movaapp.ui.explore
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.movaapp.R
 import com.example.movaapp.base.BaseFragment
 import com.example.movaapp.databinding.FragmentExploreBinding
 import com.example.movaapp.ui.home.UiState
@@ -51,9 +53,15 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
                             exploreAdapter.updateList(it)
                             binding.notFoundCard.gone()
                             binding.searchRV.visible()
+                            val icon =  binding.searchTxt.compoundDrawables[0]
+                            icon.setTint(Color.parseColor("#757575"))
+                            binding.searchTxt.setBackgroundResource(R.drawable.search_shape)
                         } else {
                             binding.notFoundCard.visible()
                             binding.searchRV.gone()
+                            val icon =  binding.searchTxt.compoundDrawables[0]
+                            icon.setTint(Color.parseColor("#E21221"))
+                            binding.searchTxt.setBackgroundResource(R.drawable.search_not_founded)
                         }
 
                     }

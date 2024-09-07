@@ -28,7 +28,7 @@ interface MovieService {
         @Query("language") language: String = "en-US"
     ): retrofit2.Response<MovieResponse>
 
-    @GET("search/movie")
+    @GET("search/multi")
     suspend fun getSearchMovies(
         @Query("api_key") apikey: String = api_key,
         @Query("include_adult") adult: Boolean = false,
