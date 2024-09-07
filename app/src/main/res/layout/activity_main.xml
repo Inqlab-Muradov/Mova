@@ -22,7 +22,7 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavView"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="80dp"
         android:background="#FA181A20 "
         app:itemTextColor="@null"
         app:itemIconSize="22dp"
@@ -31,7 +31,7 @@
         app:itemActiveIndicatorStyle="@null"
         app:itemTextAppearanceActive="@style/TextStyleBNV"
         app:itemTextAppearanceInactive="@style/TextStyleBNV"
-        android:paddingBottom="17dp"
+        android:paddingBottom="10dp"
         android:paddingTop="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

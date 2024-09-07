@@ -14,21 +14,22 @@ class MovieRepository @Inject constructor(
     val apiService: MovieService
 ) {
 
-    private fun<T> safeApiRequest(apiCall:suspend()-> Response<T>) : Flow<NetworkResponseState<T>> = flow {
-        emit(NetworkResponseState.Loading)
-        val response = apiCall.invoke()
-        if (response.isSuccessful){
-            response.body()?.let {
-                emit(NetworkResponseState.Success(it))
-            }?: emit(NetworkResponseState.Error(Exception("Error")))
-        }else{
-            emit(NetworkResponseState.Error(Exception(response.errorBody().toString())))
-        }
-    }.catch {
-        emit(NetworkResponseState.Error(it as Exception))
-    }.flowOn(
-        Dispatchers.IO
-    )
+    private fun <T> safeApiRequest(apiCall: suspend () -> Response<T>): Flow<NetworkResponseState<T>> =
+        flow {
+            emit(NetworkResponseState.Loading)
+            val response = apiCall.invoke()
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    emit(NetworkResponseState.Success(it))
+                } ?: emit(NetworkResponseState.Error(Exception("Error")))
+            } else {
+                emit(NetworkResponseState.Error(Exception(response.errorBody().toString())))
+            }
+        }.catch {
+            emit(NetworkResponseState.Error(it as Exception))
+        }.flowOn(
+            Dispatchers.IO
+        )
 
     fun getPopularMovies() = safeApiRequest {
         apiService.getPopularMovies()
@@ -40,6 +41,14 @@ class MovieRepository @Inject constructor(
 
     fun getNowPlayingMovies() = safeApiRequest {
         apiService.getNowPlayingMovies()
+    }
+
+    fun getSearchMovies(query: String) = safeApiRequest {
+        apiService.getSearchMovies(query = query)
+    }
+
+    fun getTrendingTv() = safeApiRequest {
+        apiService.getTrendingTv()
     }
 
 }

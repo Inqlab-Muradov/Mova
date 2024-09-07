@@ -1,59 +1,97 @@
-package com.example.movaapp
+package com.example.movaapp.ui.explore
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.example.movaapp.base.BaseFragment
+import com.example.movaapp.databinding.FragmentExploreBinding
+import com.example.movaapp.ui.home.UiState
+import com.example.movaapp.utils.gone
+import com.example.movaapp.utils.visible
+import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.exp
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+@AndroidEntryPoint
+class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBinding::inflate) {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ExploreFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class ExploreFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private val viewModel by viewModels<ExploreViewModel>()
+    private val exploreAdapter = SearchMovieAdapter()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.getTrendingTv()
+        binding.searchRV.adapter = exploreAdapter
+        searchTextChangeListener()
+        observeData()
+        trendingTvSeriesObserver()
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private fun searchTextChangeListener() {
+        binding.searchTxt.addTextChangedListener {
+            it?.let {
+                if (it.isEmpty()) {
+                    trendingTvSeriesObserver()
+                } else {
+                    viewModel.getSearchMovies(it.toString())
+                }
+
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_explore, container, false)
-    }
+    private fun observeData() {
+        viewModel.searchMovieState.observe(viewLifecycleOwner) {
+            when (it) {
+                is UiState.Success -> {
+                    binding.loadingAnimation.gone()
+                    it.movies.results?.let {
+                        if (it.isNotEmpty()) {
+                            exploreAdapter.updateList(it)
+                            binding.notFoundCard.gone()
+                            binding.searchRV.visible()
+                        } else {
+                            binding.notFoundCard.visible()
+                            binding.searchRV.gone()
+                        }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ExploreFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ExploreFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    }
+                }
+
+                is UiState.Error -> {
+                    binding.loadingAnimation.gone()
+                    Toast.makeText(this.context, it.message, Toast.LENGTH_SHORT).show()
+                }
+
+                is UiState.Loading -> {
+                    binding.loadingAnimation.visible()
                 }
             }
+        }
     }
+
+    private fun trendingTvSeriesObserver() {
+        viewModel.trendingTvSeries.observe(viewLifecycleOwner) {
+            when (it) {
+                is UiState.Success -> {
+                    binding.loadingAnimation.gone()
+                    it.movies.results?.let {
+                        exploreAdapter.updateList(it)
+                        binding.notFoundCard.gone()
+                    }
+                }
+
+                is UiState.Error -> {
+                    binding.loadingAnimation.gone()
+                    Toast.makeText(this.context, it.message, Toast.LENGTH_SHORT).show()
+                }
+
+                is UiState.Loading -> {
+                    binding.loadingAnimation.visible()
+                }
+            }
+        }
+    }
+
 }
