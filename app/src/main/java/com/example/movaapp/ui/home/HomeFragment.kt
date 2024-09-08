@@ -21,14 +21,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getPopularMovies()
-        binding.popularViewPager.adapter = viewPager
-        binding.topRatedRV.adapter = topRatedMovieAdapter
+        with(binding) {
+            popularViewPager.adapter = viewPager
+            topRatedRV.adapter = topRatedMovieAdapter
+            newReleasesRV.adapter = newReleaseMovieAdapter
+        }
+        with(viewModel) {
+            getTopRatedMovies()
+            getNowPlayingMovies()
+            getPopularMovies()
+        }
+        adapterFunctions()
         observeData()
-        viewModel.getTopRatedMovies()
-        viewModel.getNowPlayingMovies()
-        binding.newReleasesRV.adapter = newReleaseMovieAdapter
-
     }
 
     private fun observeData() {
@@ -59,7 +63,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                         topRatedMovieAdapter.updateList(it)
                         val topRatedList = it
                         binding.allTopRatedTxt.setOnClickListener {
-                            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToAllMoviesFragment(topRatedList.toTypedArray(),"topRated"))
+                            findNavController().navigate(
+                                HomeFragmentDirections.actionHomeFragmentToAllMoviesFragment(
+                                    topRatedList.toTypedArray(),
+                                    "topRated"
+                                )
+                            )
                         }
                     }
                 }
@@ -75,26 +84,58 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             }
         }
 
-        viewModel.nowPlayingMovieState.observe(viewLifecycleOwner){
-            when(it){
-                is UiState.Success->{
+        viewModel.nowPlayingMovieState.observe(viewLifecycleOwner) {
+            when (it) {
+                is UiState.Success -> {
                     binding.loadingAnimation.gone()
                     it.movies.results?.let {
                         newReleaseMovieAdapter.updateList(it)
                         val nowPlayingList = it
                         binding.allNewReleasesTxt.setOnClickListener {
-                            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToAllMoviesFragment(nowPlayingList.toTypedArray(),"nowPlaying"))
+                            findNavController().navigate(
+                                HomeFragmentDirections.actionHomeFragmentToAllMoviesFragment(
+                                    nowPlayingList.toTypedArray(),
+                                    "nowPlaying"
+                                )
+                            )
                         }
                     }
                 }
-                is UiState.Error->{
+
+                is UiState.Error -> {
                     binding.loadingAnimation.gone()
-                    Toast.makeText(this.context,it.message,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this.context, it.message, Toast.LENGTH_SHORT).show()
                 }
-                is UiState.Loading->{
+
+                is UiState.Loading -> {
                     binding.loadingAnimation.visible()
                 }
             }
         }
     }
+
+    private fun adapterFunctions() {
+        viewPager.onClick = {
+            findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToDetailFragment(
+                    it,"Movies"
+                )
+            )
+        }
+        newReleaseMovieAdapter.onClick = {
+            findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToDetailFragment(
+                    it,"Movies"
+                )
+            )
+        }
+        topRatedMovieAdapter.onClick = {
+            findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToDetailFragment(
+                    it,"Movies"
+                )
+            )
+        }
+    }
+
 }

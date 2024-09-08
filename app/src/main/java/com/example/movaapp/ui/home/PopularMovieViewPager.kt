@@ -10,6 +10,8 @@ class PopularMovieViewPager : RecyclerView.Adapter<PopularMovieViewPager.ViewPag
 
     private val popularMoviesList = ArrayList<Result>()
 
+    lateinit var onClick : (Int)->Unit
+
     inner class ViewPagerViewHolder(val binding: PopularmoviesItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewPagerViewHolder {
@@ -24,6 +26,9 @@ class PopularMovieViewPager : RecyclerView.Adapter<PopularMovieViewPager.ViewPag
     override fun onBindViewHolder(holder: ViewPagerViewHolder, position: Int) {
         val item = popularMoviesList[position]
         holder.binding.popularMovieItem = item
+        holder.binding.posterMovie.setOnClickListener {
+            onClick(item.id)
+        }
     }
 
     fun updateList(newList:List<Result>){

@@ -2,5 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="mova_bg">#181A20</color>
+    <color name="red">#E21221</color>
 
 </resources>

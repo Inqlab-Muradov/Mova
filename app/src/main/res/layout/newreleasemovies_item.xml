@@ -22,7 +22,7 @@
 
         <ImageView
             load_image_url="@{newReleaseItem.poster_path}"
-            android:id="@+id/imageView10"
+            android:id="@+id/newReleaseMovieImg"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

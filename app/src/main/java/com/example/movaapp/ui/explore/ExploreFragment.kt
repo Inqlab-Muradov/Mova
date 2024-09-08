@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.movaapp.R
 import com.example.movaapp.base.BaseFragment
 import com.example.movaapp.databinding.FragmentExploreBinding
@@ -28,6 +29,9 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
         searchTextChangeListener()
         observeData()
         trendingTvSeriesObserver()
+        exploreAdapter.onClick={
+            findNavController().navigate(ExploreFragmentDirections.actionExploreFragmentToDetailFragment(it,"TvSeries"))
+        }
     }
 
     private fun searchTextChangeListener() {

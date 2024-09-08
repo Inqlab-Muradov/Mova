@@ -1,9 +1,11 @@
 package com.example.movaapp.api
 
 import com.example.movaapp.model.MovieResponse
+import com.example.movaapp.model.MoviesDetailResponse
 import com.example.movaapp.utils.api_key
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MovieService {
@@ -42,4 +44,16 @@ interface MovieService {
         @Query("api_key") apiKey: String = api_key,
         @Query("language") language: String = "en-US"
     ): Response<MovieResponse>
+
+    @GET("movie/{id}")
+    suspend fun getMoviesDetail(
+        @Path("id") id: Int, @Query("api_key") apiKey: String = api_key,
+        @Query("language") language: String = "en-US"
+    ): Response<MoviesDetailResponse>
+
+    @GET("tv/{id}")
+    suspend fun getTvSeriesDetail(
+        @Path("id") id: Int, @Query("api_key") apiKey: String = api_key,
+        @Query("language") language: String = "en-US"
+    ): Response<MoviesDetailResponse>
 }

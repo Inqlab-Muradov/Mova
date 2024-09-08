@@ -21,7 +21,7 @@
 
     <ImageView
         load_image_url="@{popularMovieItem.poster_path}"
-        android:id="@+id/imageView4"
+        android:id="@+id/posterMovie"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -51,7 +51,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="32dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/posterMovie"
         app:srcCompat="@drawable/movologo" />
 
     <ImageView

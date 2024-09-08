@@ -10,6 +10,7 @@ class NewReleaseMovieAdapter :
     RecyclerView.Adapter<NewReleaseMovieAdapter.NewReleaseMovieViewHolder>() {
 
     private val newReleaseMovieList = ArrayList<Result>()
+    lateinit var onClick : (Int)->Unit
 
     inner class NewReleaseMovieViewHolder(val binding: NewreleasemoviesItemBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -27,6 +28,9 @@ class NewReleaseMovieAdapter :
     override fun onBindViewHolder(holder: NewReleaseMovieViewHolder, position: Int) {
         val item = newReleaseMovieList[position]
         holder.binding.newReleaseItem = item
+        holder.binding.newReleaseMovieImg.setOnClickListener {
+            onClick(item.id)
+        }
 
     }
 

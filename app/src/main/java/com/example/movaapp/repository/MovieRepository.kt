@@ -51,4 +51,12 @@ class MovieRepository @Inject constructor(
         apiService.getTrendingTv()
     }
 
+    fun getMoviesDetail(id:Int) = safeApiRequest {
+        apiService.getMoviesDetail(id)
+    }
+
+    fun getTvSeriesDetail(id:Int) = safeApiRequest {
+        apiService.getTvSeriesDetail(id)
+    }
+
 }

@@ -9,6 +9,7 @@ import com.example.movaapp.model.Result
 class TopRatedMovieAdapter:RecyclerView.Adapter<TopRatedMovieAdapter.TopMovieViewHolder>() {
 
     val topMoviesList = ArrayList<Result>()
+    lateinit var onClick: (Int)-> Unit
 
     inner class TopMovieViewHolder(val binding:TopratedmoviesItemBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -24,6 +25,9 @@ class TopRatedMovieAdapter:RecyclerView.Adapter<TopRatedMovieAdapter.TopMovieVie
     override fun onBindViewHolder(holder: TopMovieViewHolder, position: Int) {
         val item = topMoviesList[position]
         holder.binding.topRatedMovieItem = item
+        holder.binding.topRatedMovieImg.setOnClickListener {
+            onClick(item.id)
+        }
     }
 
     fun updateList(newList:List<Result>){

@@ -21,7 +21,7 @@
 
         <ImageView
             load_image_url="@{topRatedMovieItem.poster_path}"
-            android:id="@+id/imageView9"
+            android:id="@+id/topRatedMovieImg"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
