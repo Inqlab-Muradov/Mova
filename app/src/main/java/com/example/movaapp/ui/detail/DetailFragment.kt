@@ -57,8 +57,6 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
             when(it){
                 is DetailUiState.Success->{
                     binding.moviesDetailItem =it.moviesDetailResponse
-                    binding.releaseDateTxt.text = it.moviesDetailResponse.first_air_date
-                    binding.originalNameTxt.text = it.moviesDetailResponse.original_name
                     binding.loadingAnimation.gone()
                 }
                 is DetailUiState.Error->{
