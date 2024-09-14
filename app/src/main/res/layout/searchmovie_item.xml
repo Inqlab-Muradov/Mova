@@ -2,8 +2,8 @@
 <layout>
     <data>
         <variable
-            name="searchMovieItem"
-            type="com.example.movaapp.model.Result" />
+            name="exploreMoviesItem"
+            type="com.example.movaapp.model.ResultX" />
     </data>
 
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -20,7 +20,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            load_image_url="@{searchMovieItem.poster_path}"
+            load_image_url="@{exploreMoviesItem.poster_path}"
             android:id="@+id/searchImg"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -49,7 +49,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{searchMovieItem.vote_average}"
+                    android:text="@{exploreMoviesItem.vote_average.toString()}"
                     android:textSize="10sp"
                     android:textColor="@color/white"
                     android:fontFamily="@font/urbanistfont"

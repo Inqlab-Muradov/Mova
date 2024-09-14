@@ -5,17 +5,14 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.movaapp.R
 import com.example.movaapp.base.BaseFragment
 import com.example.movaapp.databinding.FragmentExploreBinding
-import com.example.movaapp.ui.home.UiState
 import com.example.movaapp.utils.gone
 import com.example.movaapp.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.exp
 
 @AndroidEntryPoint
 class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBinding::inflate) {
@@ -29,9 +26,13 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
         searchTextChangeListener()
         observeData()
         trendingTvSeriesObserver()
-        exploreAdapter.onClick={
-            findNavController().navigate(ExploreFragmentDirections.actionExploreFragmentToDetailFragment(it,"TvSeries"))
+        exploreAdapter.onClick = {id,media->
+            findNavController().navigate(
+                ExploreFragmentDirections.actionExploreFragmentToDetailFragment(id,media
+                )
+            )
         }
+
     }
 
     private fun searchTextChangeListener() {
@@ -47,59 +48,60 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
         }
     }
 
+
     private fun observeData() {
-        viewModel.searchMovieState.observe(viewLifecycleOwner) {
+        viewModel.searchMoviesState.observe(viewLifecycleOwner) {
             when (it) {
-                is UiState.Success -> {
+                is ExploreUiState.Success -> {
                     binding.loadingAnimation.gone()
-                    it.movies.results?.let {
+                    it.result.results?.let {
                         if (it.isNotEmpty()) {
                             exploreAdapter.updateList(it)
                             binding.notFoundCard.gone()
                             binding.searchRV.visible()
-                            val icon =  binding.searchTxt.compoundDrawables[0]
+                            val icon = binding.searchTxt.compoundDrawables[0]
                             icon.setTint(Color.parseColor("#757575"))
                             binding.searchTxt.setBackgroundResource(R.drawable.search_shape)
                         } else {
                             binding.notFoundCard.visible()
                             binding.searchRV.gone()
-                            val icon =  binding.searchTxt.compoundDrawables[0]
+                            val icon = binding.searchTxt.compoundDrawables[0]
                             icon.setTint(Color.parseColor("#E21221"))
                             binding.searchTxt.setBackgroundResource(R.drawable.search_not_founded)
                         }
-
                     }
                 }
 
-                is UiState.Error -> {
+                is ExploreUiState.Error -> {
                     binding.loadingAnimation.gone()
                     Toast.makeText(this.context, it.message, Toast.LENGTH_SHORT).show()
                 }
 
-                is UiState.Loading -> {
+                is ExploreUiState.Loading -> {
                     binding.loadingAnimation.visible()
                 }
             }
         }
     }
 
+
     private fun trendingTvSeriesObserver() {
-        viewModel.trendingTvSeries.observe(viewLifecycleOwner) {
+        viewModel.trendingTvSeriesState.observe(viewLifecycleOwner) {
             when (it) {
-                is UiState.Success -> {
+                is ExploreUiState.Success -> {
                     binding.loadingAnimation.gone()
-                    it.movies.results?.let {
+                    it.result.results?.let {
                         exploreAdapter.updateList(it)
                         binding.notFoundCard.gone()
                     }
                 }
 
-                is UiState.Error -> {
+                is ExploreUiState.Error -> {
                     binding.loadingAnimation.gone()
                     Toast.makeText(this.context, it.message, Toast.LENGTH_SHORT).show()
                 }
 
-                is UiState.Loading -> {
+                is ExploreUiState.Loading -> {
                     binding.loadingAnimation.visible()
                 }
             }

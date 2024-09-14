@@ -27,6 +27,10 @@ class AllMoviesFragment :
             binding.allMoviesTitle.text = "New Releases "
         }
         allMoviesAdapter.updateList(args.list.toList())
+
+        allMoviesAdapter.onClick={
+            findNavController().navigate(AllMoviesFragmentDirections.actionAllMoviesFragmentToDetailFragment(it,"Movies"))
+        }
     }
 
 }

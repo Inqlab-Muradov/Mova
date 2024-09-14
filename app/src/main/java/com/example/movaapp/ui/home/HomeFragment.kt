@@ -38,26 +38,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private fun observeData() {
         viewModel.popularMovieState.observe(viewLifecycleOwner) {
             when (it) {
-                is UiState.Success -> {
+                is HomeUiState.Success -> {
                     binding.loadingAnimation.gone()
                     it.movies.results?.let {
                         viewPager.updateList(it)
                     }
                 }
 
-                is UiState.Error -> {
+                is HomeUiState.Error -> {
                     binding.loadingAnimation.gone()
                     Toast.makeText(this.context, it.message, Toast.LENGTH_SHORT).show()
                 }
 
-                is UiState.Loading -> {
+                is HomeUiState.Loading -> {
                     binding.loadingAnimation.visible()
                 }
             }
         }
         viewModel.topRatedMovieState.observe(viewLifecycleOwner) {
             when (it) {
-                is UiState.Success -> {
+                is HomeUiState.Success -> {
                     binding.loadingAnimation.gone()
                     it.movies.results?.let {
                         topRatedMovieAdapter.updateList(it)
@@ -73,12 +73,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                     }
                 }
 
-                is UiState.Error -> {
+                is HomeUiState.Error -> {
                     binding.loadingAnimation.gone()
                     Toast.makeText(this.context, it.message, Toast.LENGTH_SHORT).show()
                 }
 
-                is UiState.Loading -> {
+                is HomeUiState.Loading -> {
                     binding.loadingAnimation.visible()
                 }
             }
@@ -86,7 +86,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
         viewModel.nowPlayingMovieState.observe(viewLifecycleOwner) {
             when (it) {
-                is UiState.Success -> {
+                is HomeUiState.Success -> {
                     binding.loadingAnimation.gone()
                     it.movies.results?.let {
                         newReleaseMovieAdapter.updateList(it)
@@ -102,12 +102,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                     }
                 }
 
-                is UiState.Error -> {
+                is HomeUiState.Error -> {
                     binding.loadingAnimation.gone()
                     Toast.makeText(this.context, it.message, Toast.LENGTH_SHORT).show()
                 }
 
-                is UiState.Loading -> {
+                is HomeUiState.Loading -> {
                     binding.loadingAnimation.visible()
                 }
             }

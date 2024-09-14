@@ -9,6 +9,7 @@ import com.example.movaapp.model.Result
 class AllMoviesItemAdapter : RecyclerView.Adapter<AllMoviesItemAdapter.AllMoviesViewHolder>() {
 
     private val allMoviesList = ArrayList<Result>()
+    lateinit var onClick:(Int)->Unit
 
     inner class AllMoviesViewHolder(val binding: AllmoviesItemBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -25,6 +26,9 @@ class AllMoviesItemAdapter : RecyclerView.Adapter<AllMoviesItemAdapter.AllMovies
     override fun onBindViewHolder(holder: AllMoviesViewHolder, position: Int) {
         val item = allMoviesList[position]
         holder.binding.allMoviesItem = item
+        holder.binding.allMoviesCard.setOnClickListener {
+            onClick(item.id)
+        }
     }
 
     fun updateList(newList: List<Result>) {

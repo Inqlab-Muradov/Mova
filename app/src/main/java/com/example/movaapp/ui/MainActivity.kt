@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         navHostFragment.navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.splashFragment, R.id.welcomeFragment, R.id.startedFragment, R.id.registerFragment, R.id.loginFragment, R.id.allMoviesFragment -> {
+                R.id.splashFragment, R.id.welcomeFragment, R.id.startedFragment, R.id.registerFragment, R.id.loginFragment, R.id.allMoviesFragment, R.id.detailFragment -> {
                     binding.bottomNavView.gone()
                 }
 

@@ -51,12 +51,40 @@ class MovieRepository @Inject constructor(
         apiService.getTrendingTv()
     }
 
-    fun getMoviesDetail(id:Int) = safeApiRequest {
+    fun getMoviesDetail(id: Int) = safeApiRequest {
         apiService.getMoviesDetail(id)
     }
 
-    fun getTvSeriesDetail(id:Int) = safeApiRequest {
+    fun getTvSeriesDetail(id: Int) = safeApiRequest {
         apiService.getTvSeriesDetail(id)
+    }
+
+    fun getMovieCredits(id: Int) = safeApiRequest {
+        apiService.getMoviesCredits(id)
+    }
+
+    fun getTvSeriesName(id:Int)=safeApiRequest {
+        apiService.getTvSeriesName(id)
+    }
+
+    fun getTvSeriesCredits(id:Int) = safeApiRequest {
+        apiService.getTvSeriesCredits(id)
+    }
+
+    fun getMovieRecommendations(id:Int)=safeApiRequest {
+        apiService.getMoviesRecommendations(id)
+    }
+
+    fun getTvSeriesRecommend(id:Int) = safeApiRequest {
+        apiService.getTvSeriesRecommend(id)
+    }
+
+    fun getMoviesReviews(id:Int)=safeApiRequest {
+        apiService.getMoviesReviews(id)
+    }
+
+    fun getTvSeriesReviews(id:Int) = safeApiRequest {
+        apiService.getTvSeriesReviews(id)
     }
 
 }

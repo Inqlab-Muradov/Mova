@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movaapp.repository.MovieRepository
-import com.example.movaapp.ui.home.UiState
 import com.example.movaapp.utils.NetworkResponseState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -18,13 +17,11 @@ class ExploreViewModel @Inject constructor(
     private val repository: MovieRepository
 ):ViewModel() {
 
-    private val _trendingTvSeriesState = MutableLiveData<UiState>()
-    val trendingTvSeries :LiveData<UiState> get() = _trendingTvSeriesState
+    private val _searchMovieState = MutableLiveData<ExploreUiState>()
+    val searchMoviesState :LiveData<ExploreUiState> get() = _searchMovieState
 
-    private val _searchMovieState = MutableLiveData<UiState>()
-    val searchMovieState:LiveData<UiState> get() = _searchMovieState
-
-
+    private val _trendingTvSeriesState = MutableLiveData<ExploreUiState>()
+    val trendingTvSeriesState : LiveData<ExploreUiState> get() = _trendingTvSeriesState
 
     fun getSearchMovies(query:String){
         viewModelScope.launch {
@@ -33,14 +30,14 @@ class ExploreViewModel @Inject constructor(
                      is NetworkResponseState.Success->{
                          it.result?.let {
                              Log.e("searching movies",it.toString())
-                             _searchMovieState.value = UiState.Success(it)
+                             _searchMovieState.value = ExploreUiState.Success(it)
                          }
                      }
                      is NetworkResponseState.Error->{
-                         _searchMovieState.value =UiState.Error(it.exception.toString())
+                         _searchMovieState.value =ExploreUiState.Error(it.exception.toString())
                      }
                      is NetworkResponseState.Loading->{
-                         _searchMovieState.value = UiState.Loading
+                         _searchMovieState.value = ExploreUiState.Loading
                      }
                  }
              }
@@ -54,14 +51,14 @@ class ExploreViewModel @Inject constructor(
                     is NetworkResponseState.Success->{
 
                         it.result?.let {
-                            _trendingTvSeriesState.value = UiState.Success(it)
+                            _trendingTvSeriesState.value = ExploreUiState.Success(it)
                         }
                     }
                     is NetworkResponseState.Error->{
-                        _trendingTvSeriesState.value = UiState.Error(it.exception.toString())
+                        _trendingTvSeriesState.value = ExploreUiState.Error(it.exception.toString())
                     }
                     is NetworkResponseState.Loading->{
-                        _trendingTvSeriesState.value = UiState.Loading
+                        _trendingTvSeriesState.value = ExploreUiState.Loading
                     }
                 }
             }
