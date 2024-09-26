@@ -29,7 +29,7 @@ class AllMoviesFragment :
         allMoviesAdapter.updateList(args.list.toList())
 
         allMoviesAdapter.onClick={
-            findNavController().navigate(AllMoviesFragmentDirections.actionAllMoviesFragmentToDetailFragment(it,"Movies"))
+            findNavController().navigate(AllMoviesFragmentDirections.actionAllMoviesFragmentToDetailFragment(it,"movie"))
         }
     }
 

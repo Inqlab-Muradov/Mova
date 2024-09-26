@@ -94,9 +94,13 @@
     </fragment>
     <fragment
         android:id="@+id/myListFragment"
-        android:name="com.example.movaapp.MyListFragment"
+        android:name="com.example.movaapp.ui.mylist.MyListFragment"
         android:label="fragment_my_list"
-        tools:layout="@layout/fragment_my_list" />
+        tools:layout="@layout/fragment_my_list" >
+        <action
+            android:id="@+id/action_myListFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/downloadFragment"
         android:name="com.example.movaapp.DownloadFragment"
@@ -132,6 +136,11 @@
         <argument
             android:name="type"
             app:argType="string" />
+        <action
+            android:id="@+id/action_detailFragment_self3"
+            app:destination="@id/detailFragment"
+            app:popUpTo="@id/detailFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>

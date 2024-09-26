@@ -1,6 +1,8 @@
 package com.example.movaapp.repository
 
 import com.example.movaapp.api.MovieService
+import com.example.movaapp.local.MyListDao
+import com.example.movaapp.local.MyListItem
 import com.example.movaapp.utils.NetworkResponseState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +13,8 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class MovieRepository @Inject constructor(
-    val apiService: MovieService
+    val apiService: MovieService,
+    val myListDao: MyListDao
 ) {
 
     private fun <T> safeApiRequest(apiCall: suspend () -> Response<T>): Flow<NetworkResponseState<T>> =
@@ -63,28 +66,43 @@ class MovieRepository @Inject constructor(
         apiService.getMoviesCredits(id)
     }
 
-    fun getTvSeriesName(id:Int)=safeApiRequest {
+    fun getTvSeriesName(id: Int) = safeApiRequest {
         apiService.getTvSeriesName(id)
     }
 
-    fun getTvSeriesCredits(id:Int) = safeApiRequest {
+    fun getTvSeriesCredits(id: Int) = safeApiRequest {
         apiService.getTvSeriesCredits(id)
     }
 
-    fun getMovieRecommendations(id:Int)=safeApiRequest {
+    fun getMovieRecommendations(id: Int) = safeApiRequest {
         apiService.getMoviesRecommendations(id)
     }
 
-    fun getTvSeriesRecommend(id:Int) = safeApiRequest {
+    fun getTvSeriesRecommend(id: Int) = safeApiRequest {
         apiService.getTvSeriesRecommend(id)
     }
 
-    fun getMoviesReviews(id:Int)=safeApiRequest {
+    fun getMoviesReviews(id: Int) = safeApiRequest {
         apiService.getMoviesReviews(id)
     }
 
-    fun getTvSeriesReviews(id:Int) = safeApiRequest {
+    fun getTvSeriesReviews(id: Int) = safeApiRequest {
         apiService.getTvSeriesReviews(id)
     }
+
+    fun addMyList(myListItem: MyListItem) {
+        myListDao.addMyListItem(myListItem)
+    }
+
+    fun getAllMyListItem() = myListDao.getAllMyListItem().flowOn(Dispatchers.IO)
+
+    fun filterMyList(mediaType: String) = myListDao.filterMyList(mediaType).flowOn(Dispatchers.IO)
+
+    fun deleteMyListItem(myListItem: MyListItem) {
+        myListDao.deleteMyListItem(myListItem)
+    }
+
+    fun getMyListById(id: Int) = myListDao.getMyListById(id).flowOn(Dispatchers.IO)
+
 
 }

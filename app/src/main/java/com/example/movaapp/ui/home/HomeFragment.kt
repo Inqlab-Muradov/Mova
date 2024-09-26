@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.movaapp.base.BaseFragment
 import com.example.movaapp.databinding.FragmentHomeBinding
+import com.example.movaapp.local.MyListItem
 import com.example.movaapp.utils.gone
 import com.example.movaapp.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -118,23 +119,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         viewPager.onClick = {
             findNavController().navigate(
                 HomeFragmentDirections.actionHomeFragmentToDetailFragment(
-                    it,"Movies"
+                    it,"movie"
                 )
             )
         }
         newReleaseMovieAdapter.onClick = {
             findNavController().navigate(
                 HomeFragmentDirections.actionHomeFragmentToDetailFragment(
-                    it,"Movies"
+                    it,"movie"
                 )
             )
         }
         topRatedMovieAdapter.onClick = {
             findNavController().navigate(
                 HomeFragmentDirections.actionHomeFragmentToDetailFragment(
-                    it,"Movies"
+                    it,"movie"
                 )
             )
+        }
+        viewPager.addMyList={item->
+            item.poster_path?.let {
+                val posterPath = it
+                val myListItem = MyListItem(item.id,posterPath,item.vote_average,"movie")
+                viewModel.addMyList(myListItem)
+            }
         }
     }
 

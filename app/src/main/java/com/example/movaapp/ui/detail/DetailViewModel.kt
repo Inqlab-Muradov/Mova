@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.movaapp.local.MyListItem
 import com.example.movaapp.model.MovieCreditsResponse
 import com.example.movaapp.model.ReviewResponse
 import com.example.movaapp.model.TvSeriesDetail
@@ -11,6 +12,7 @@ import com.example.movaapp.repository.MovieRepository
 import com.example.movaapp.ui.home.HomeUiState
 import com.example.movaapp.utils.NetworkResponseState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -47,6 +49,23 @@ class DetailViewModel @Inject constructor(
     private val _tvSeriesReviewsResponse = MutableLiveData<MovieReviewsUiState>()
     val tvSeriesReviewsResponse:LiveData<MovieReviewsUiState> get() = _tvSeriesReviewsResponse
 
+    private val _myListItemById = MutableLiveData<MyListItem>()
+    val myListItemById :LiveData<MyListItem> get() = _myListItemById
+
+    fun initialMovieCalls(id:Int){
+        getMoviesDetail(id)
+        getMovieCredits(id)
+        getMovieRecommendations(id)
+        getMovieReviews(id)
+    }
+
+    fun initialTvSeriesCall(id:Int){
+        getTvSeriesDetail(id)
+        getTvSeriesName(id)
+        getTvSeriesCredits(id)
+        getTvSeriesRecommend(id)
+        getTvSeriesReviews(id)
+    }
 
 
     fun getMoviesDetail(id: Int) {
@@ -243,6 +262,26 @@ class DetailViewModel @Inject constructor(
                         _tvSeriesReviewsResponse.value = MovieReviewsUiState.Loading
                     }
                 }
+            }
+        }
+    }
+
+    fun addMyListItem(myListItem:MyListItem){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addMyList(myListItem)
+        }
+    }
+
+    fun deleteMyListItem(myListItem: MyListItem){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteMyListItem(myListItem)
+        }
+    }
+
+    fun getMyListById(id:Int){
+        viewModelScope.launch {
+            repository.getMyListById(id).collectLatest {
+                _myListItemById.value  = it
             }
         }
     }

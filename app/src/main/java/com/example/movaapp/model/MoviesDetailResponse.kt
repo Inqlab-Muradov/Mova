@@ -7,7 +7,7 @@ data class MoviesDetailResponse(
     val budget: Int?,
     val genres: List<Genre>?,
     val homepage: String?,
-    val id: Int?,
+    val id: Int,
     val imdb_id: String?,
     val origin_country: List<String>?,
     val original_language: String?,
@@ -25,6 +25,6 @@ data class MoviesDetailResponse(
     val tagline: String?,
     val title: String?,
     val video: Boolean?,
-    val vote_average: Double?,
+    val vote_average: String,
     val vote_count: Int?
 )

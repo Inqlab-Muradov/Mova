@@ -20,12 +20,6 @@
         />
 
     <item
-        android:id="@+id/downloadFragment"
-        android:title="Download"
-        android:icon="@drawable/download_icon_state"
-        />
-
-    <item
         android:id="@+id/profileFragment"
         android:title="Profile"
         android:icon="@drawable/profile_icon_state"

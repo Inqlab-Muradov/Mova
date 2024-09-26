@@ -56,16 +56,17 @@
                 android:textColor="@color/white"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/imageView12"
+                app:layout_constraintEnd_toStartOf="@+id/addMyListDetail"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/imageView11" />
 
-            <ImageView
-                android:id="@+id/imageView12"
-                android:layout_width="17dp"
-                android:layout_height="16dp"
+            <CheckBox
+                android:id="@+id/addMyListDetail"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginEnd="20dp"
-                android:src="@drawable/mylist"
+                android:background="@drawable/addmylist_bg"
+                android:button="@null"
                 app:layout_constraintBottom_toBottomOf="@+id/originalNameTxt"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/originalNameTxt" />
@@ -86,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/urbanistfont"
-                android:text="@{moviesDetailItem.vote_average.toString()}"
+                android:text="@{moviesDetailItem.vote_average}"
                 android:textColor="@color/red"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView14"
@@ -467,10 +468,12 @@
                 android:layout_width="45dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="12dp"
-                android:text="@{moviesCreditsItem.cast[1].name}"
-                android:textSize="10sp"
-                android:textColor="@color/white"
+                android:layout_marginEnd="8dp"
                 android:fontFamily="@font/urbanistfont"
+                android:text="@{moviesCreditsItem.cast[1].name}"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/castSecondPhoto"
                 app:layout_constraintTop_toTopOf="@+id/castSecondPhoto" />
 

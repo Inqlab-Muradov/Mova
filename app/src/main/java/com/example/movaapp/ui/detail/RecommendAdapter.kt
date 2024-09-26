@@ -9,6 +9,7 @@ import com.example.movaapp.model.Result
 class RecommendAdapter:RecyclerView.Adapter<RecommendAdapter.RecommendViewHolder>() {
 
     val recommendList = ArrayList<Result>()
+    lateinit var onClick : (Int)->Unit
 
     inner class RecommendViewHolder(val binding:RecommendItemBinding):RecyclerView.ViewHolder(binding.root)
 
@@ -23,6 +24,9 @@ class RecommendAdapter:RecyclerView.Adapter<RecommendAdapter.RecommendViewHolder
     override fun onBindViewHolder(holder: RecommendViewHolder, position: Int) {
         val item = recommendList[position]
         holder.binding.recommendItem = item
+        holder.binding.recommendItemsCard.setOnClickListener {
+            onClick(item.id)
+        }
     }
 
     fun updateList(newList:List<Result>){

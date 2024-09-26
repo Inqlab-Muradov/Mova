@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.movaapp.local.MyListItem
 import com.example.movaapp.repository.MovieRepository
 import com.example.movaapp.utils.NetworkResponseState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -90,5 +92,11 @@ class HomeViewModel @Inject constructor(
             }
 
         }
+    }
+
+    fun addMyList(myListItem: MyListItem){
+       viewModelScope.launch (Dispatchers.IO){
+           movieRepository.addMyList(myListItem)
+       }
     }
 }
