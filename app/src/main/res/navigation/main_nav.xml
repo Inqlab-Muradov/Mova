@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/exploreFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/splashFragment"
@@ -81,6 +81,12 @@
         <action
             android:id="@+id/action_homeFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_youtubePlayerFragment"
+            app:destination="@id/youtubePlayerFragment" />
+        <action
+            android:id="@+id/action_homeFragment_self"
+            app:destination="@id/homeFragment" />
 
     </fragment>
     <fragment
@@ -101,11 +107,6 @@
             android:id="@+id/action_myListFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/downloadFragment"
-        android:name="com.example.movaapp.DownloadFragment"
-        android:label="fragment_download"
-        tools:layout="@layout/fragment_download" />
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.movaapp.ProfileFragment"
@@ -141,6 +142,18 @@
             app:destination="@id/detailFragment"
             app:popUpTo="@id/detailFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_detailFragment_to_youtubePlayerFragment"
+            app:destination="@id/youtubePlayerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/youtubePlayerFragment"
+        android:name="com.example.movaapp.YoutubePlayerFragment"
+        android:label="fragment_youtube_player"
+        tools:layout="@layout/fragment_youtube_player" >
+        <argument
+            android:name="videoId"
+            app:argType="string" />
     </fragment>
 
 </navigation>

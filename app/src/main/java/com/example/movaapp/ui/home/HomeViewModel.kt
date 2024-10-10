@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movaapp.local.MyListItem
 import com.example.movaapp.repository.MovieRepository
+import com.example.movaapp.ui.detail.DetailViewModel.MoviesVideoUiState
 import com.example.movaapp.utils.NetworkResponseState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +27,9 @@ class HomeViewModel @Inject constructor(
 
     private val _nowPlayingMovieState = MutableLiveData<HomeUiState>()
     val nowPlayingMovieState: LiveData<HomeUiState> get() = _nowPlayingMovieState
+
+    private val _moviesVideoResponse = MutableLiveData<MoviesVideoUiState>()
+    val moviesVideoResponse:LiveData<MoviesVideoUiState> get() = _moviesVideoResponse
 
     fun getPopularMovies() {
         viewModelScope.launch {
@@ -98,5 +102,25 @@ class HomeViewModel @Inject constructor(
        viewModelScope.launch (Dispatchers.IO){
            movieRepository.addMyList(myListItem)
        }
+    }
+
+    fun getMovieVideo(id:Int){
+        viewModelScope.launch {
+            movieRepository.getMoviesVideo(id).collectLatest {
+                when(it){
+                    is NetworkResponseState.Success->{
+                        it.result?.let {result->
+                            _moviesVideoResponse.value = MoviesVideoUiState.Success(result)
+                        }
+                    }
+                    is NetworkResponseState.Error->{
+                        _moviesVideoResponse.value = MoviesVideoUiState.Error(it.exception.toString())
+                    }
+                    is NetworkResponseState.Loading->{
+                        _moviesVideoResponse.value = MoviesVideoUiState.Loading
+                    }
+                }
+            }
+        }
     }
 }

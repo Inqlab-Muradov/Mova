@@ -1,13 +1,18 @@
 package com.example.movaapp.ui.home
 
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.movaapp.base.BaseFragment
 import com.example.movaapp.databinding.FragmentHomeBinding
 import com.example.movaapp.local.MyListItem
+import com.example.movaapp.ui.detail.DetailFragmentDirections
+import com.example.movaapp.ui.detail.DetailViewModel
 import com.example.movaapp.utils.gone
 import com.example.movaapp.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,6 +24,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private val viewPager = PopularMovieViewPager()
     private val topRatedMovieAdapter = TopRatedMovieAdapter()
     private val newReleaseMovieAdapter = NewReleaseMovieAdapter()
+
+    private lateinit var currentVideoId:String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,6 +41,38 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         }
         adapterFunctions()
         observeData()
+
+        viewPager.onClickPlay={itemID->
+            currentVideoId = ""
+            viewModel.getMovieVideo(itemID)
+            viewModel.moviesVideoResponse.observe(viewLifecycleOwner){videoResponse->
+                when(videoResponse){
+                    is DetailViewModel.MoviesVideoUiState.Success->{
+                        binding.loadingAnimation.gone()
+                        videoResponse.response.results?.let {videoList->
+                            for(i in videoList){
+                                if (i.type=="Trailer"){
+                                    i.key?.let {key->
+                                        currentVideoId = key
+                                    }
+                                }
+                            }
+                        }
+                        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToYoutubePlayerFragment(currentVideoId))
+                        viewModel.moviesVideoResponse.removeObservers(viewLifecycleOwner)
+
+                    }
+                    is DetailViewModel.MoviesVideoUiState.Error->{
+                        binding.loadingAnimation.gone()
+                        Toast.makeText(this.context,videoResponse.message,Toast.LENGTH_SHORT).show()
+
+                    }
+                    is DetailViewModel.MoviesVideoUiState.Loading->{
+                        binding.loadingAnimation.visible()
+                    }
+                }
+            }
+        }
     }
 
     private fun observeData() {
@@ -113,6 +152,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 }
             }
         }
+
+
     }
 
     private fun adapterFunctions() {
@@ -144,6 +185,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 viewModel.addMyList(myListItem)
             }
         }
+
     }
+
 
 }

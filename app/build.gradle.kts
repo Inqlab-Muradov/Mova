@@ -70,6 +70,14 @@ dependencies {
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
 
+    val activity_version = "1.9.2"
+    implementation("androidx.activity:activity-ktx:$activity_version")
+
+    implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
+    implementation("com.google.firebase:firebase-storage")
+
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.1")
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

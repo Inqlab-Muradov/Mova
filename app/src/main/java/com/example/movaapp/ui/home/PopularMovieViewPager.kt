@@ -12,6 +12,7 @@ class PopularMovieViewPager : RecyclerView.Adapter<PopularMovieViewPager.ViewPag
 
     lateinit var onClick : (Int)->Unit
     lateinit var addMyList:(Result)->Unit
+    lateinit var onClickPlay:(Int)->Unit
 
     inner class ViewPagerViewHolder(val binding: PopularmoviesItemBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -32,6 +33,9 @@ class PopularMovieViewPager : RecyclerView.Adapter<PopularMovieViewPager.ViewPag
         }
         holder.binding.addMyList.setOnClickListener {
             addMyList(item)
+        }
+        holder.binding.playHome.setOnClickListener {
+            onClickPlay(item.id)
         }
     }
 

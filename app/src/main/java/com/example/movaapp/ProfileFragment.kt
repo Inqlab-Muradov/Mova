@@ -1,59 +1,141 @@
 package com.example.movaapp
 
+import android.content.Intent
+import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.example.movaapp.base.BaseFragment
+import com.example.movaapp.databinding.FragmentProfileBinding
+import com.example.movaapp.utils.imageBase_url
+import com.example.movaapp.utils.loadImageUrl
+import com.example.movaapp.utils.loadProfileImageUrl
+import com.google.firebase.Firebase
+import com.google.firebase.storage.storage
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+@AndroidEntryPoint
+class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class ProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+    @Inject
+    lateinit var sp: SharedPreferences
+
+    private val storage = Firebase.storage
+    private val reference = storage.reference
+    private val imageReference = reference.child("profilePhoto")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        photoPickerSetup()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val isSaving = sp.getBoolean("isSaving", false)
+        if (isSaving) {
+            val fullName = sp.getString("fullName", "fullname")
+            binding.fullNameInput.setText(fullName)
+            val nickName = sp.getString("nickName", "nickname")
+            binding.nickNameInput.setText(nickName)
+            val email = sp.getString("email", "email")
+            binding.emailProfileInput.setText(email)
+            val phoneNumber = sp.getString("phoneNumber", "Phone Number")
+            binding.phoneNumberInput.setText(phoneNumber)
+            val gender = sp.getString("gender", "Gender")
+            binding.genderInput.setText(gender)
+        }
+
+        binding.edit.setOnClickListener {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+        binding.save.setOnClickListener {
+            savingData()
+        }
+
+        getProfilePhoto()
+    }
+
+    private fun getProfilePhoto() {
+        imageReference.metadata.addOnSuccessListener {
+            try {
+                lifecycleScope.launch {
+                    val url = imageReference.downloadUrl.await()
+                    url?.let {
+                        binding.editingPP.loadProfileImageUrl(it.toString())
+                    }
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this.context, e.message, Toast.LENGTH_SHORT).show()
+            }
+        }.addOnFailureListener {
+            binding.editingPP.setImageResource(R.drawable.editingpp)
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+    private fun saveProfilePhoto(uri: Uri) {
+        try {
+            lifecycleScope.launch {
+                imageReference.putFile(uri).await()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(this.context, e.message, Toast.LENGTH_SHORT).show()
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ProfileFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun photoPickerSetup() {
+        pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri != null) {
+                binding.editingPP.setImageURI(uri)
+                binding.save.setOnClickListener {
+                    saveProfilePhoto(uri)
+                    Toast.makeText(
+                        this.context,
+                        "Profile Photo is successfully changed",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
+            } else {
+                Toast.makeText(this.context, "Media is not selected", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun savingData() {
+        val fullName = binding.fullNameInput.text.toString()
+        val nickName = binding.nickNameInput.text.toString()
+        val email = binding.emailProfileInput.text.toString()
+        val phoneNumber = binding.phoneNumberInput.text.toString()
+        val gender = binding.genderInput.text.toString()
+
+        if (fullName.isNotEmpty() && nickName.isNotEmpty() && email.isNotEmpty() && phoneNumber.isNotEmpty() && gender.isNotEmpty()) {
+            val editor = sp.edit()
+            editor.putString("fullName", fullName)
+            editor.putString("nickName", nickName)
+            editor.putString("email", email)
+            editor.putString("phoneNumber", phoneNumber)
+            editor.putString("gender", gender)
+            editor.putBoolean("isSaving", true)
+            editor.apply()
+            Toast.makeText(this.context, "Saving is completed successfully", Toast.LENGTH_SHORT)
+                .show()
+        } else Toast.makeText(this.context, "Fill all the items", Toast.LENGTH_SHORT).show()
     }
 }

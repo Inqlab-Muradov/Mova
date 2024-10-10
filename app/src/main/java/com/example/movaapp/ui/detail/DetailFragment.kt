@@ -23,7 +23,9 @@ import com.example.movaapp.ui.home.TopRatedMovieAdapter
 import com.example.movaapp.utils.gone
 import com.example.movaapp.utils.loadImageUrl
 import com.example.movaapp.utils.visible
+import com.example.movaapp.utils.youtube_api_key
 import com.google.android.material.button.MaterialButton.OnCheckedChangeListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -320,6 +322,58 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
                 }
 
                 is DetailViewModel.MovieReviewsUiState.Loading -> {
+                    binding.loadingAnimation.visible()
+                }
+            }
+        }
+        viewModel.moviesVideoResponse.observe(viewLifecycleOwner){
+            when(it){
+                is DetailViewModel.MoviesVideoUiState.Success->{
+                    binding.loadingAnimation.gone()
+                    it.response.results?.let {videoList->
+                        for(i in videoList){
+                            if (i.type=="Trailer"){
+                                val videoId = i.key
+                                videoId?.let {
+                                    binding.playDetail.setOnClickListener {
+                                        findNavController().navigate(DetailFragmentDirections.actionDetailFragmentToYoutubePlayerFragment(videoId))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                is DetailViewModel.MoviesVideoUiState.Error->{
+                    binding.loadingAnimation.gone()
+                    Toast.makeText(this.context,it.message,Toast.LENGTH_SHORT).show()
+                }
+                is DetailViewModel.MoviesVideoUiState.Loading->{
+                    binding.loadingAnimation.visible()
+                }
+            }
+        }
+        viewModel.tvSeriesVideoResponse.observe(viewLifecycleOwner){
+            when(it){
+                is DetailViewModel.MoviesVideoUiState.Success->{
+                    binding.loadingAnimation.gone()
+                    it.response.results?.let {videoList->
+                        for(i in videoList){
+                            if (i.type=="Trailer"){
+                                val videoId = i.key
+                                videoId?.let {
+                                    binding.playDetail.setOnClickListener {
+                                        findNavController().navigate(DetailFragmentDirections.actionDetailFragmentToYoutubePlayerFragment(videoId))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                is DetailViewModel.MoviesVideoUiState.Error->{
+                    binding.loadingAnimation.gone()
+                    Toast.makeText(this.context,it.message,Toast.LENGTH_SHORT).show()
+                }
+                is DetailViewModel.MoviesVideoUiState.Loading->{
                     binding.loadingAnimation.visible()
                 }
             }

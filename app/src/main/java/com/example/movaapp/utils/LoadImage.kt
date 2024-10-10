@@ -16,3 +16,15 @@ fun ImageView.loadImageUrl(url: String) {
     Glide.with(this).load(imageBase_url + url).apply(options)
         .placeholder(R.drawable.movalogo).into(this)
 }
+
+
+fun ImageView.loadProfileImageUrl(url: String) {
+    val options = RequestOptions().centerCrop()
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .priority(Priority.HIGH)
+        .dontAnimate()
+        .dontTransform()
+    Glide.with(this).load(url).apply(options)
+        .placeholder(R.drawable.movalogo).into(this)
+}
+

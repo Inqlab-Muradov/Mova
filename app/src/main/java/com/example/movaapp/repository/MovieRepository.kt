@@ -104,5 +104,13 @@ class MovieRepository @Inject constructor(
 
     fun getMyListById(id: Int) = myListDao.getMyListById(id).flowOn(Dispatchers.IO)
 
+    fun getMoviesVideo(id:Int) = safeApiRequest {
+        apiService.getMoviesVideos(id)
+    }
+
+    fun getTvSeriesVideos(id:Int) = safeApiRequest {
+        apiService.getTvSeriesVideos(id)
+    }
+
 
 }

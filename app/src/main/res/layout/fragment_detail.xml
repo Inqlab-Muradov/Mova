@@ -218,7 +218,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button3"
+                android:id="@+id/playDetail"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -250,10 +250,10 @@
                 app:icon="@drawable/checkeddownload"
                 app:iconGravity="textStart"
                 app:iconTint="@color/red"
-                app:layout_constraintBottom_toBottomOf="@+id/button3"
+                app:layout_constraintBottom_toBottomOf="@+id/playDetail"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline6"
-                app:layout_constraintTop_toTopOf="@+id/button3"
+                app:layout_constraintTop_toTopOf="@+id/playDetail"
                 app:strokeColor="@color/red"
                 app:strokeWidth="2dp" />
 
@@ -270,7 +270,7 @@
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button3" />
+                app:layout_constraintTop_toBottomOf="@+id/playDetail" />
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/loadingAnimation"
@@ -600,7 +600,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/moreLikeThisCard" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

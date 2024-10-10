@@ -3,6 +3,7 @@ package com.example.movaapp.api
 import com.example.movaapp.model.MovieCreditsResponse
 import com.example.movaapp.model.MovieResponse
 import com.example.movaapp.model.MoviesDetailResponse
+import com.example.movaapp.model.MoviesVideoResponse
 import com.example.movaapp.model.ResultX
 import com.example.movaapp.model.ReviewResponse
 import com.example.movaapp.model.SearchResponse
@@ -98,14 +99,30 @@ interface MovieService {
     ): Response<MovieResponse>
 
     @GET("movie/{id}/reviews")
-    suspend fun getMoviesReviews(@Path("id") id: Int,
-                                 @Query("api_key") apikey: String = api_key,
-                                 @Query("page") page: Int = 1,
-                                 @Query("language") language: String = "en-US"):Response<ReviewResponse>
+    suspend fun getMoviesReviews(
+        @Path("id") id: Int,
+        @Query("api_key") apikey: String = api_key,
+        @Query("page") page: Int = 1,
+        @Query("language") language: String = "en-US"
+    ): Response<ReviewResponse>
 
     @GET("tv/{id}/reviews")
-    suspend fun getTvSeriesReviews(@Path("id") id: Int,
-                                 @Query("api_key") apikey: String = api_key,
-                                 @Query("page") page: Int = 1,
-                                 @Query("language") language: String = "en-US"):Response<ReviewResponse>
+    suspend fun getTvSeriesReviews(
+        @Path("id") id: Int,
+        @Query("api_key") apikey: String = api_key,
+        @Query("page") page: Int = 1,
+        @Query("language") language: String = "en-US"
+    ): Response<ReviewResponse>
+
+    @GET("movie/{id}/videos")
+    suspend fun getMoviesVideos(
+        @Path("id") id: Int,
+        @Query("api_key") apikey: String = api_key,
+        @Query("language") language: String = "en-US"
+    ): Response<MoviesVideoResponse>
+
+    @GET("tv/{id}/videos")
+    suspend fun getTvSeriesVideos(@Path("id") id: Int,
+                                  @Query("api_key") apikey: String = api_key,
+                                  @Query("language") language: String = "en-US"):Response<MoviesVideoResponse>
 }

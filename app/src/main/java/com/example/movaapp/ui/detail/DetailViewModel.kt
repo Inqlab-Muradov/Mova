@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movaapp.local.MyListItem
 import com.example.movaapp.model.MovieCreditsResponse
+import com.example.movaapp.model.MoviesVideoResponse
 import com.example.movaapp.model.ReviewResponse
 import com.example.movaapp.model.TvSeriesDetail
 import com.example.movaapp.repository.MovieRepository
@@ -52,11 +53,18 @@ class DetailViewModel @Inject constructor(
     private val _myListItemById = MutableLiveData<MyListItem>()
     val myListItemById :LiveData<MyListItem> get() = _myListItemById
 
+    private val _moviesVideoResponse = MutableLiveData<MoviesVideoUiState>()
+    val moviesVideoResponse:LiveData<MoviesVideoUiState> get() = _moviesVideoResponse
+
+    private val _tvSeriesVideoResponse = MutableLiveData<MoviesVideoUiState>()
+    val tvSeriesVideoResponse:LiveData<MoviesVideoUiState> get() = _tvSeriesVideoResponse
+
     fun initialMovieCalls(id:Int){
         getMoviesDetail(id)
         getMovieCredits(id)
         getMovieRecommendations(id)
         getMovieReviews(id)
+        getMoviesVideo(id)
     }
 
     fun initialTvSeriesCall(id:Int){
@@ -65,6 +73,7 @@ class DetailViewModel @Inject constructor(
         getTvSeriesCredits(id)
         getTvSeriesRecommend(id)
         getTvSeriesReviews(id)
+        getTvSeriesVideo(id)
     }
 
 
@@ -286,21 +295,68 @@ class DetailViewModel @Inject constructor(
         }
     }
 
+    fun getMoviesVideo(id:Int){
+        viewModelScope.launch {
+            repository.getMoviesVideo(id).collectLatest {
+                when(it){
+                    is NetworkResponseState.Success->{
+                        it.result?.let {result->
+                            _moviesVideoResponse.value = MoviesVideoUiState.Success(result)
+                        }
+                    }
+                    is NetworkResponseState.Error->{
+                        _moviesVideoResponse.value = MoviesVideoUiState.Error(it.exception.toString())
+                    }
+                    is NetworkResponseState.Loading->{
+                        _moviesVideoResponse.value = MoviesVideoUiState.Loading
+                    }
+                }
+            }
+        }
+    }
+
+    fun getTvSeriesVideo(id:Int){
+        viewModelScope.launch {
+            repository.getTvSeriesVideos(id).collectLatest {
+                when(it){
+                    is NetworkResponseState.Success->{
+                        it.result?.let {result->
+                            _tvSeriesVideoResponse.value = MoviesVideoUiState.Success(result)
+                        }
+                    }
+                    is NetworkResponseState.Error->{
+                        _tvSeriesVideoResponse.value = MoviesVideoUiState.Error(it.exception.toString())
+                    }
+                    is NetworkResponseState.Loading->{
+                        _tvSeriesVideoResponse.value = MoviesVideoUiState.Loading
+                    }
+                }
+            }
+        }
+    }
+
+
     sealed class MovieCreditsUiState {
         data class Success(val response: MovieCreditsResponse) : MovieCreditsUiState()
         data class Error(val message: String) : MovieCreditsUiState()
-        object Loading : MovieCreditsUiState()
+        data object Loading : MovieCreditsUiState()
     }
 
     sealed class TvSeriesNameState {
         data class Success(val response: TvSeriesDetail) : TvSeriesNameState()
         data class Error(val message: String) : TvSeriesNameState()
-        object Loading : TvSeriesNameState()
+        data object Loading : TvSeriesNameState()
     }
 
     sealed class MovieReviewsUiState{
         data class Success(val response:ReviewResponse):MovieReviewsUiState()
         data class Error(val message:String):MovieReviewsUiState()
-        object Loading:MovieReviewsUiState()
+        data object Loading:MovieReviewsUiState()
+    }
+
+    sealed class MoviesVideoUiState{
+        data class Success(val response:MoviesVideoResponse):MoviesVideoUiState()
+        data class Error(val message:String):MoviesVideoUiState()
+        data object Loading:MoviesVideoUiState()
     }
 }
