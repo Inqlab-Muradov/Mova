@@ -16,6 +16,7 @@ import com.example.movaapp.ui.detail.DetailViewModel
 import com.example.movaapp.utils.gone
 import com.example.movaapp.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.log
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
@@ -43,33 +44,34 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         observeData()
 
         viewPager.onClickPlay={itemID->
-            currentVideoId = ""
             viewModel.getMovieVideo(itemID)
-            viewModel.moviesVideoResponse.observe(viewLifecycleOwner){videoResponse->
-                when(videoResponse){
-                    is DetailViewModel.MoviesVideoUiState.Success->{
-                        binding.loadingAnimation.gone()
-                        videoResponse.response.results?.let {videoList->
-                            for(i in videoList){
-                                if (i.type=="Trailer"){
-                                    i.key?.let {key->
-                                        currentVideoId = key
-                                    }
-                                }
-                            }
+        }
+
+        viewModel.moviesVideoResponse.observe(viewLifecycleOwner){videoResponse->
+            when(videoResponse){
+                is DetailViewModel.MoviesVideoUiState.Success->{
+                    var  movieId = ""
+                    binding.loadingAnimation.gone()
+                    videoResponse.response.id?.let {
+                         movieId = it.toString()
+                    }
+                    videoResponse.response.results?.let {videoList->
+                        videoList.filter {
+                            it.type=="Trailer"
+                        }.forEach { list->
+                            currentVideoId = list.key?:""
                         }
-                        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToYoutubePlayerFragment(currentVideoId))
-                        viewModel.moviesVideoResponse.removeObservers(viewLifecycleOwner)
+                    }
+                    findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToYoutubePlayerFragment(currentVideoId,movieId,"movie"))
 
-                    }
-                    is DetailViewModel.MoviesVideoUiState.Error->{
-                        binding.loadingAnimation.gone()
-                        Toast.makeText(this.context,videoResponse.message,Toast.LENGTH_SHORT).show()
+                }
+                is DetailViewModel.MoviesVideoUiState.Error->{
+                    binding.loadingAnimation.gone()
+                    Toast.makeText(this.context,videoResponse.message,Toast.LENGTH_SHORT).show()
 
-                    }
-                    is DetailViewModel.MoviesVideoUiState.Loading->{
-                        binding.loadingAnimation.visible()
-                    }
+                }
+                is DetailViewModel.MoviesVideoUiState.Loading->{
+                    binding.loadingAnimation.visible()
                 }
             }
         }

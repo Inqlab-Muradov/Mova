@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/splashFragment"
@@ -24,6 +24,9 @@
         <action
             android:id="@+id/action_welcomeFragment_to_startedFragment"
             app:destination="@id/startedFragment" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/startedFragment"
@@ -109,9 +112,13 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.movaapp.ProfileFragment"
+        android:name="com.example.movaapp.ui.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/allMoviesFragment"
         android:name="com.example.movaapp.ui.home.AllMoviesFragment"
@@ -148,11 +155,23 @@
     </fragment>
     <fragment
         android:id="@+id/youtubePlayerFragment"
-        android:name="com.example.movaapp.YoutubePlayerFragment"
+        android:name="com.example.movaapp.ui.youtubeplayer.YoutubePlayerFragment"
         android:label="fragment_youtube_player"
         tools:layout="@layout/fragment_youtube_player" >
         <argument
             android:name="videoId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_youtubePlayerFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <argument
+            android:name="id"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_youtubePlayerFragment_self"
+            app:destination="@id/youtubePlayerFragment" />
+        <argument
+            android:name="mediaType"
             app:argType="string" />
     </fragment>
 

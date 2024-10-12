@@ -1,33 +1,21 @@
 package com.example.movaapp.ui.detail
 
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.movaapp.R
 import com.example.movaapp.base.BaseFragment
 import com.example.movaapp.databinding.FragmentDetailBinding
 import com.example.movaapp.local.MyListItem
-import com.example.movaapp.ui.home.AllMoviesItemAdapter
 import com.example.movaapp.ui.home.HomeUiState
-import com.example.movaapp.ui.home.TopRatedMovieAdapter
 import com.example.movaapp.utils.gone
 import com.example.movaapp.utils.loadImageUrl
 import com.example.movaapp.utils.visible
-import com.example.movaapp.utils.youtube_api_key
-import com.google.android.material.button.MaterialButton.OnCheckedChangeListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding::inflate) {
@@ -336,7 +324,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
                                 val videoId = i.key
                                 videoId?.let {
                                     binding.playDetail.setOnClickListener {
-                                        findNavController().navigate(DetailFragmentDirections.actionDetailFragmentToYoutubePlayerFragment(videoId))
+                                        findNavController().navigate(DetailFragmentDirections.actionDetailFragmentToYoutubePlayerFragment(videoId,args.id.toString(),"movie"))
                                     }
                                 }
                             }
@@ -362,7 +350,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
                                 val videoId = i.key
                                 videoId?.let {
                                     binding.playDetail.setOnClickListener {
-                                        findNavController().navigate(DetailFragmentDirections.actionDetailFragmentToYoutubePlayerFragment(videoId))
+                                        findNavController().navigate(DetailFragmentDirections.actionDetailFragmentToYoutubePlayerFragment(videoId,args.id.toString(),"tv"))
                                     }
                                 }
                             }

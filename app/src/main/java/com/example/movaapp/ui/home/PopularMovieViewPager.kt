@@ -1,5 +1,6 @@
 package com.example.movaapp.ui.home
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -35,6 +36,7 @@ class PopularMovieViewPager : RecyclerView.Adapter<PopularMovieViewPager.ViewPag
             addMyList(item)
         }
         holder.binding.playHome.setOnClickListener {
+            Log.d("TAG", "onBindViewHolder() called")
             onClickPlay(item.id)
         }
     }

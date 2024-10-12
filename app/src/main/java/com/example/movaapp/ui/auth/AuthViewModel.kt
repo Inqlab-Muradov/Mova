@@ -1,5 +1,6 @@
 package com.example.movaapp.ui.auth
 
+import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val sp:SharedPreferences
 ) : ViewModel() {
 
     private val _authResult = MutableLiveData<AuthUiState>()
@@ -25,6 +27,9 @@ class AuthViewModel @Inject constructor(
                 when (it) {
                     is NetworkResponseState.Success -> {
                         _authResult.value = AuthUiState.Success
+                        val editor = sp.edit()
+                        editor.putBoolean("isLogin",true)
+                        editor.apply()
                     }
 
                     is NetworkResponseState.Error -> {
