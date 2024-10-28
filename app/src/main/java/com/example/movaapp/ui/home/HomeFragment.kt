@@ -43,38 +43,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         adapterFunctions()
         observeData()
 
-        viewPager.onClickPlay={itemID->
-            viewModel.getMovieVideo(itemID)
-        }
-
-        viewModel.moviesVideoResponse.observe(viewLifecycleOwner){videoResponse->
-            when(videoResponse){
-                is DetailViewModel.MoviesVideoUiState.Success->{
-                    var  movieId = ""
-                    binding.loadingAnimation.gone()
-                    videoResponse.response.id?.let {
-                         movieId = it.toString()
-                    }
-                    videoResponse.response.results?.let {videoList->
-                        videoList.filter {
-                            it.type=="Trailer"
-                        }.forEach { list->
-                            currentVideoId = list.key?:""
-                        }
-                    }
-                    findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToYoutubePlayerFragment(currentVideoId,movieId,"movie"))
-
-                }
-                is DetailViewModel.MoviesVideoUiState.Error->{
-                    binding.loadingAnimation.gone()
-                    Toast.makeText(this.context,videoResponse.message,Toast.LENGTH_SHORT).show()
-
-                }
-                is DetailViewModel.MoviesVideoUiState.Loading->{
-                    binding.loadingAnimation.visible()
-                }
-            }
-        }
     }
 
     private fun observeData() {
@@ -155,6 +123,34 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             }
         }
 
+        viewModel.moviesVideoResponse.observe(viewLifecycleOwner){videoResponse->
+            when(videoResponse){
+                is DetailViewModel.MoviesVideoUiState.Success->{
+                    var  movieId = ""
+                    binding.loadingAnimation.gone()
+                    videoResponse.response.id?.let {
+                        movieId = it.toString()
+                    }
+                    videoResponse.response.results?.let {videoList->
+                        videoList.filter {
+                            it.type=="Trailer"
+                        }.forEach { list->
+                            currentVideoId = list.key?:""
+                        }
+                    }
+                    findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToYoutubePlayerFragment(currentVideoId,movieId,"movie"))
+
+                }
+                is DetailViewModel.MoviesVideoUiState.Error->{
+                    binding.loadingAnimation.gone()
+                    Toast.makeText(this.context,videoResponse.message,Toast.LENGTH_SHORT).show()
+
+                }
+                is DetailViewModel.MoviesVideoUiState.Loading->{
+                    binding.loadingAnimation.visible()
+                }
+            }
+        }
 
     }
 
@@ -185,10 +181,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 val posterPath = it
                 val myListItem = MyListItem(item.id,posterPath,item.vote_average,"movie")
                 viewModel.addMyList(myListItem)
+                Toast.makeText(this.context,"Film is added successfully",Toast.LENGTH_SHORT).show()
             }
         }
-
+        viewPager.onClickPlay={itemID->
+            viewModel.getMovieVideo(itemID)
+        }
     }
-
-
 }

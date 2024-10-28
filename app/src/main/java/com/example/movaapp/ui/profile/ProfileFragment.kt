@@ -94,7 +94,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
                     saveProfilePhoto(uri)
                     Toast.makeText(
                         this.context,
-                        "Profile Photo is successfully changed",
+                        "Saving is completed successfully",
                         Toast.LENGTH_SHORT
                     ).show()
                 }

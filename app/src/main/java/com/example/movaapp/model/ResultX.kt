@@ -6,7 +6,6 @@ data class ResultX(
     val gender: Int?,
     val genre_ids: List<Int?>?,
     val id: Int?,
-    val known_for: List<KnownFor?>?,
     val known_for_department: String?,
     val media_type: String,
     val name: String?,

@@ -17,112 +17,50 @@ import retrofit2.http.Query
 interface MovieService {
 
     @GET("trending/movie/day")
-    suspend fun getPopularMovies(
-        @Query("api_key") apikey: String = api_key,
-        @Query("language") language: String = "en-US"
-    ): retrofit2.Response<MovieResponse>
+    suspend fun getPopularMovies( ): Response<MovieResponse>
 
     @GET("movie/top_rated")
-    suspend fun getTopRatedMovies(
-        @Query("api_key") apikey: String = api_key,
-        @Query("page") page: Int = 1,
-        @Query("language") language: String = "en-US"
-    ): retrofit2.Response<MovieResponse>
+    suspend fun getTopRatedMovies(): Response<MovieResponse>
 
     @GET("movie/now_playing")
-    suspend fun getNowPlayingMovies(
-        @Query("api_key") apikey: String = api_key,
-        @Query("page") page: Int = 1,
-        @Query("language") language: String = "en-US"
-    ): retrofit2.Response<MovieResponse>
+    suspend fun getNowPlayingMovies(): Response<MovieResponse>
 
     @GET("search/multi")
-    suspend fun getSearchMovies(
-        @Query("api_key") apikey: String = api_key,
-        @Query("include_adult") adult: Boolean = false,
-        @Query("page") page: Int = 1,
-        @Query("language") language: String = "en-US",
-        @Query("query") query: String
-    ): Response<SearchResponse>
+    suspend fun getSearchMovies(@Query("query") query: String): Response<SearchResponse>
 
     @GET("trending/tv/day")
-    suspend fun getTrendingTv(
-        @Query("api_key") apiKey: String = api_key,
-        @Query("language") language: String = "en-US"
-    ): Response<SearchResponse>
+    suspend fun getTrendingTv(): Response<SearchResponse>
 
     @GET("movie/{id}")
-    suspend fun getMoviesDetail(
-        @Path("id") id: Int, @Query("api_key") apiKey: String = api_key,
-        @Query("language") language: String = "en-US"
-    ): Response<MoviesDetailResponse>
+    suspend fun getMoviesDetail(@Path("id") id: Int ): Response<MoviesDetailResponse>
 
     @GET("tv/{id}")
-    suspend fun getTvSeriesDetail(
-        @Path("id") id: Int, @Query("api_key") apiKey: String = api_key,
-        @Query("language") language: String = "en-US"
-    ): Response<MoviesDetailResponse>
-
+    suspend fun getTvSeriesDetail(@Path("id") id: Int ): Response<MoviesDetailResponse>
 
     @GET("tv/{id}")
-    suspend fun getTvSeriesName(
-        @Path("id") id: Int, @Query("api_key") apiKey: String = api_key,
-        @Query("language") language: String = "en-US"
-    ): Response<TvSeriesDetail>
+    suspend fun getTvSeriesName(@Path("id") id: Int): Response<TvSeriesDetail>
 
     @GET("movie/{id}/credits")
-    suspend fun getMoviesCredits(
-        @Path("id") id: Int, @Query("api_key") apiKey: String = api_key,
-        @Query("language") language: String = "en-US"
-    ): Response<MovieCreditsResponse>
+    suspend fun getMoviesCredits(@Path("id") id: Int): Response<MovieCreditsResponse>
 
     @GET("tv/{id}/credits")
-    suspend fun getTvSeriesCredits(
-        @Path("id") id: Int, @Query("api_key") apiKey: String = api_key,
-        @Query("language") language: String = "en-US"
-    ): Response<MovieCreditsResponse>
+    suspend fun getTvSeriesCredits(@Path("id") id: Int): Response<MovieCreditsResponse>
 
     @GET("movie/{id}/recommendations")
-    suspend fun getMoviesRecommendations(
-        @Path("id") id: Int,
-        @Query("api_key") apikey: String = api_key,
-        @Query("page") page: Int = 1,
-        @Query("language") language: String = "en-US"
-    ): Response<MovieResponse>
+    suspend fun getMoviesRecommendations( @Path("id") id: Int): Response<MovieResponse>
 
     @GET("tv/{id}/recommendations")
-    suspend fun getTvSeriesRecommend(
-        @Path("id") id: Int,
-        @Query("api_key") apikey: String = api_key,
-        @Query("page") page: Int = 1,
-        @Query("language") language: String = "en-US"
-    ): Response<MovieResponse>
+    suspend fun getTvSeriesRecommend(@Path("id") id: Int): Response<MovieResponse>
 
     @GET("movie/{id}/reviews")
-    suspend fun getMoviesReviews(
-        @Path("id") id: Int,
-        @Query("api_key") apikey: String = api_key,
-        @Query("page") page: Int = 1,
-        @Query("language") language: String = "en-US"
-    ): Response<ReviewResponse>
+    suspend fun getMoviesReviews(@Path("id") id: Int): Response<ReviewResponse>
 
     @GET("tv/{id}/reviews")
-    suspend fun getTvSeriesReviews(
-        @Path("id") id: Int,
-        @Query("api_key") apikey: String = api_key,
-        @Query("page") page: Int = 1,
-        @Query("language") language: String = "en-US"
-    ): Response<ReviewResponse>
+    suspend fun getTvSeriesReviews( @Path("id") id: Int): Response<ReviewResponse>
 
     @GET("movie/{id}/videos")
-    suspend fun getMoviesVideos(
-        @Path("id") id: Int,
-        @Query("api_key") apikey: String = api_key,
-        @Query("language") language: String = "en-US"
-    ): Response<MoviesVideoResponse>
+    suspend fun getMoviesVideos( @Path("id") id: Int): Response<MoviesVideoResponse>
 
     @GET("tv/{id}/videos")
-    suspend fun getTvSeriesVideos(@Path("id") id: Int,
-                                  @Query("api_key") apikey: String = api_key,
-                                  @Query("language") language: String = "en-US"):Response<MoviesVideoResponse>
+    suspend fun getTvSeriesVideos(@Path("id") id: Int):Response<MoviesVideoResponse>
 }

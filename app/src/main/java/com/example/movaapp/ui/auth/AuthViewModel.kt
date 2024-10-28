@@ -50,6 +50,9 @@ class AuthViewModel @Inject constructor(
                 when (it) {
                     is NetworkResponseState.Success -> {
                         _authResult.value = AuthUiState.Success
+                        val editor = sp.edit()
+                        editor.putBoolean("isLogin",true)
+                        editor.apply()
                     }
 
                     is NetworkResponseState.Error -> {
