@@ -3,31 +3,30 @@ package com.example.movaapp.ui.home
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movaapp.databinding.PopularmoviesItemBinding
 import com.example.movaapp.model.Result
 
-class PopularMovieViewPager : RecyclerView.Adapter<PopularMovieViewPager.ViewPagerViewHolder>() {
+class PopularMovieViewPager :
+    ListAdapter<Result, PopularMovieViewPager.ViewPagerViewHolder>(PopularMovieDiffCallBack()) {
 
-    private val popularMoviesList = ArrayList<Result>()
+    lateinit var onClick: (Int) -> Unit
+    lateinit var addMyList: (Result) -> Unit
+    lateinit var onClickPlay: (Int) -> Unit
 
-    lateinit var onClick : (Int)->Unit
-    lateinit var addMyList:(Result)->Unit
-    lateinit var onClickPlay:(Int)->Unit
-
-    inner class ViewPagerViewHolder(val binding: PopularmoviesItemBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewPagerViewHolder(val binding: PopularmoviesItemBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewPagerViewHolder {
-        val view = PopularmoviesItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val view =
+            PopularmoviesItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewPagerViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return popularMoviesList.size
-    }
-
     override fun onBindViewHolder(holder: ViewPagerViewHolder, position: Int) {
-        val item = popularMoviesList[position]
+        val item = getItem(position)
         holder.binding.popularMovieItem = item
         holder.binding.posterMovie.setOnClickListener {
             onClick(item.id)
@@ -41,9 +40,14 @@ class PopularMovieViewPager : RecyclerView.Adapter<PopularMovieViewPager.ViewPag
         }
     }
 
-    fun updateList(newList:List<Result>){
-        popularMoviesList.clear()
-        popularMoviesList.addAll(newList)
-        notifyDataSetChanged()
+    class PopularMovieDiffCallBack : DiffUtil.ItemCallback<Result>() {
+        override fun areItemsTheSame(oldItem: Result, newItem: Result): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Result, newItem: Result): Boolean {
+            return oldItem.id == newItem.id
+        }
     }
+
 }

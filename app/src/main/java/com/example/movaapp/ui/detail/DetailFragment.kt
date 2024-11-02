@@ -241,7 +241,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
             when (it) {
                 is HomeUiState.Success -> {
                     it.movies.results?.let {
-                        recommendAdapter.updateList(it)
+                        recommendAdapter.submitList(it)
                     }
                     binding.loadingAnimation.gone()
                 }
@@ -261,7 +261,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
             when (it) {
                 is HomeUiState.Success -> {
                     it.movies.results?.let {
-                        recommendAdapter.updateList(it)
+                        recommendAdapter.submitList(it)
                     }
                     binding.loadingAnimation.gone()
                 }
@@ -280,7 +280,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
             when (it) {
                 is DetailViewModel.MovieReviewsUiState.Success -> {
                     it.response.results?.let {
-                        reviewAdapter.updateList(it)
+                        reviewAdapter.submitList(it)
                     }
                     binding.loadingAnimation.gone()
                 }
@@ -299,7 +299,7 @@ class DetailFragment : BaseFragment<FragmentDetailBinding>(FragmentDetailBinding
             when (it) {
                 is DetailViewModel.MovieReviewsUiState.Success -> {
                     it.response.results?.let {
-                        reviewAdapter.updateList(it)
+                        reviewAdapter.submitList(it)
                     }
                     binding.loadingAnimation.gone()
                 }

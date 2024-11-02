@@ -2,15 +2,16 @@ package com.example.movaapp.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movaapp.databinding.NewreleasemoviesItemBinding
 import com.example.movaapp.model.Result
 
 class NewReleaseMovieAdapter :
-    RecyclerView.Adapter<NewReleaseMovieAdapter.NewReleaseMovieViewHolder>() {
+    ListAdapter<Result, NewReleaseMovieAdapter.NewReleaseMovieViewHolder>(NewReleaseDiffCallBack()) {
 
-    private val newReleaseMovieList = ArrayList<Result>()
-    lateinit var onClick : (Int)->Unit
+    lateinit var onClick: (Int) -> Unit
 
     inner class NewReleaseMovieViewHolder(val binding: NewreleasemoviesItemBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -21,23 +22,23 @@ class NewReleaseMovieAdapter :
         return NewReleaseMovieViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return newReleaseMovieList.size
-    }
 
     override fun onBindViewHolder(holder: NewReleaseMovieViewHolder, position: Int) {
-        val item = newReleaseMovieList[position]
+        val item = getItem(position)
         holder.binding.newReleaseItem = item
         holder.binding.newReleaseMovieImg.setOnClickListener {
             onClick(item.id)
         }
-
     }
 
-    fun updateList(newList: List<Result>) {
-        newReleaseMovieList.clear()
-        newReleaseMovieList.addAll(newList)
-        notifyDataSetChanged()
+    class NewReleaseDiffCallBack : DiffUtil.ItemCallback<Result>() {
+        override fun areItemsTheSame(oldItem: Result, newItem: Result): Boolean {
+            return oldItem.id == newItem.id
+        }
 
+        override fun areContentsTheSame(oldItem: Result, newItem: Result): Boolean {
+            return oldItem == newItem
+        }
     }
+
 }

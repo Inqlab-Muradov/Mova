@@ -51,7 +51,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 is HomeUiState.Success -> {
                     binding.loadingAnimation.gone()
                     it.movies.results?.let {
-                        viewPager.updateList(it)
+                        viewPager.submitList(it)
                     }
                 }
 
@@ -70,7 +70,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 is HomeUiState.Success -> {
                     binding.loadingAnimation.gone()
                     it.movies.results?.let {
-                        topRatedMovieAdapter.updateList(it)
+                        topRatedMovieAdapter.submitList(it)
                         val topRatedList = it
                         binding.allTopRatedTxt.setOnClickListener {
                             findNavController().navigate(
@@ -99,7 +99,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 is HomeUiState.Success -> {
                     binding.loadingAnimation.gone()
                     it.movies.results?.let {
-                        newReleaseMovieAdapter.updateList(it)
+                        newReleaseMovieAdapter.submitList(it)
                         val nowPlayingList = it
                         binding.allNewReleasesTxt.setOnClickListener {
                             findNavController().navigate(

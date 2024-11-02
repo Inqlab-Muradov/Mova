@@ -66,7 +66,7 @@ class YoutubePlayerFragment :
             when (it) {
                 is HomeUiState.Success -> {
                     it.movies.results?.let {
-                        recommendAdapter.updateList(it)
+                        recommendAdapter.submitList(it)
                     }
                     binding.loadingAnimation.gone()
                 }
@@ -86,7 +86,7 @@ class YoutubePlayerFragment :
             when (it) {
                 is HomeUiState.Success -> {
                     it.movies.results?.let {
-                        recommendAdapter.updateList(it)
+                        recommendAdapter.submitList(it)
                     }
                     binding.loadingAnimation.gone()
                 }

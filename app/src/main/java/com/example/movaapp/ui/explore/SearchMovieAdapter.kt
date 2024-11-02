@@ -2,15 +2,17 @@ package com.example.movaapp.ui.explore
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movaapp.databinding.SearchmovieItemBinding
 import com.example.movaapp.model.Result
 import com.example.movaapp.model.ResultX
 
-class SearchMovieAdapter : RecyclerView.Adapter<SearchMovieAdapter.SearchViewHolder>() {
+class SearchMovieAdapter :
+    ListAdapter<ResultX, SearchMovieAdapter.SearchViewHolder>(ExploreDiffCallBack()) {
 
-    private val searchMovieList = ArrayList<ResultX>()
-    lateinit var onClick: (Int,String) -> Unit
+    lateinit var onClick: (Int, String) -> Unit
 
     inner class SearchViewHolder(val binding: SearchmovieItemBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -21,24 +23,23 @@ class SearchMovieAdapter : RecyclerView.Adapter<SearchMovieAdapter.SearchViewHol
         return SearchViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return searchMovieList.size
-    }
-
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
-        val item = searchMovieList[position]
+        val item = getItem(position)
         holder.binding.exploreMoviesItem = item
         holder.binding.searchImg.setOnClickListener {
             item.id?.let {
-                onClick(item.id,item.media_type)
+                onClick(item.id, item.media_type)
             }
         }
     }
 
+    class ExploreDiffCallBack : DiffUtil.ItemCallback<ResultX>() {
+        override fun areItemsTheSame(oldItem: ResultX, newItem: ResultX): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-    fun updateList(newList: List<ResultX>) {
-        searchMovieList.clear()
-        searchMovieList.addAll(newList)
-        notifyDataSetChanged()
+        override fun areContentsTheSame(oldItem: ResultX, newItem: ResultX): Boolean {
+            return oldItem == newItem
+        }
     }
 }

@@ -2,13 +2,13 @@ package com.example.movaapp.ui.detail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movaapp.databinding.ReviewItemBinding
 import com.example.movaapp.model.ResultReviews
 
-class ReviewAdapter:RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
-
-    private val reviewList = ArrayList<ResultReviews>()
+class ReviewAdapter:ListAdapter<ResultReviews,ReviewAdapter.ReviewViewHolder>(ReviewsDiffCallBack()) {
 
     inner class ReviewViewHolder(val binding:ReviewItemBinding):RecyclerView.ViewHolder(binding.root)
 
@@ -17,18 +17,18 @@ class ReviewAdapter:RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
         return ReviewViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return reviewList.size
-    }
-
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
-        val item = reviewList[position]
+        val item = getItem(position)
         holder.binding.reviewItem = item
     }
 
-    fun updateList(newList:List<ResultReviews>){
-        reviewList.clear()
-        reviewList.addAll(newList)
-        notifyDataSetChanged()
+    class ReviewsDiffCallBack:DiffUtil.ItemCallback<ResultReviews>() {
+        override fun areItemsTheSame(oldItem: ResultReviews, newItem: ResultReviews): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: ResultReviews, newItem: ResultReviews): Boolean {
+            return oldItem==newItem
+        }
     }
 }

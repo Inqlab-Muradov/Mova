@@ -2,13 +2,15 @@ package com.example.movaapp.ui.mylist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movaapp.databinding.MylistItemBinding
 import com.example.movaapp.local.MyListItem
 
-class MyListItemAdapter : RecyclerView.Adapter<MyListItemAdapter.MyListItemViewHolder>() {
+class MyListItemAdapter :
+    ListAdapter<MyListItem, MyListItemAdapter.MyListItemViewHolder>(MyListDiffCallBAck()) {
 
-    private val myListItemList = ArrayList<MyListItem>()
     lateinit var onClick: (Int, String) -> Unit
 
     inner class MyListItemViewHolder(val binding: MylistItemBinding) :
@@ -19,21 +21,22 @@ class MyListItemAdapter : RecyclerView.Adapter<MyListItemAdapter.MyListItemViewH
         return MyListItemViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return myListItemList.size
-    }
-
     override fun onBindViewHolder(holder: MyListItemViewHolder, position: Int) {
-        val item = myListItemList[position]
+        val item = getItem(position)
         holder.binding.allMyListItem = item
         holder.binding.allMoviesCard.setOnClickListener {
             onClick(item.id, item.mediaType)
         }
     }
 
-    fun updateList(newList: List<MyListItem>) {
-        myListItemList.clear()
-        myListItemList.addAll(newList)
-        notifyDataSetChanged()
+    class MyListDiffCallBAck : DiffUtil.ItemCallback<MyListItem>() {
+        override fun areItemsTheSame(oldItem: MyListItem, newItem: MyListItem): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: MyListItem, newItem: MyListItem): Boolean {
+            return oldItem == newItem
+        }
     }
+
 }

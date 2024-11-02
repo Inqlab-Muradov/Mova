@@ -26,13 +26,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
         searchTextChangeListener()
         observeData()
         trendingTvSeriesObserver()
-        exploreAdapter.onClick = {id,media->
-            findNavController().navigate(
-                ExploreFragmentDirections.actionExploreFragmentToDetailFragment(id,media
-                )
-            )
-        }
-
+        adapterFunctions()
     }
 
     private fun searchTextChangeListener() {
@@ -56,7 +50,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
                     binding.loadingAnimation.gone()
                     it.result.results?.let {
                         if (it.isNotEmpty()) {
-                            exploreAdapter.updateList(it)
+                            exploreAdapter.submitList(it)
                             binding.notFoundCard.gone()
                             binding.searchRV.visible()
                             val icon = binding.searchTxt.compoundDrawables[0]
@@ -91,7 +85,7 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
                 is ExploreUiState.Success -> {
                     binding.loadingAnimation.gone()
                     it.result.results?.let {
-                        exploreAdapter.updateList(it)
+                        exploreAdapter.submitList(it)
                         binding.notFoundCard.gone()
                     }
                 }
@@ -105,6 +99,16 @@ class ExploreFragment : BaseFragment<FragmentExploreBinding>(FragmentExploreBind
                     binding.loadingAnimation.visible()
                 }
             }
+        }
+    }
+
+    private fun adapterFunctions() {
+        exploreAdapter.onClick = { id, media ->
+            findNavController().navigate(
+                ExploreFragmentDirections.actionExploreFragmentToDetailFragment(
+                    id, media
+                )
+            )
         }
     }
 

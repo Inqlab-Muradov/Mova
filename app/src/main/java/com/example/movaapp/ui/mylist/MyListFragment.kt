@@ -77,7 +77,7 @@ class MyListFragment : BaseFragment<FragmentMyListBinding>(FragmentMyListBinding
     private fun observeData() {
         viewModel.myListItemList.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
-                adapter.updateList(it)
+                adapter.submitList(it)
                 with(binding) {
                     myListRV.visible()
                     emptyListImage.gone()
@@ -95,7 +95,7 @@ class MyListFragment : BaseFragment<FragmentMyListBinding>(FragmentMyListBinding
         }
         viewModel.filteredMyList.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
-                adapter.updateList(it)
+                adapter.submitList(it)
                 with(binding) {
                     myListRV.visible()
                     emptyListImage.gone()
